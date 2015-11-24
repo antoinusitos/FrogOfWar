@@ -24,5 +24,6 @@ public class GameManager : MonoBehaviour {
     {
         PlateauManager.Instance.InitPlateau();
         PlayerManager.Instance.SpawnPlayers();
-	}
+        BonusManager.Instance.SpawnObjectif();
+    }
 }

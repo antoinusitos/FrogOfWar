@@ -39,6 +39,13 @@ public class InputManager : MonoBehaviour {
                 {
                     PlayerManager.Instance.WantToAttack(hit.transform.gameObject);
                 }
+                else if (hit.transform.GetComponent<Objectif>())
+                {
+                    hit.transform.GetComponent<Objectif>().Possess();
+                    PlayerManager.Instance.PossessObjectif();
+                    GameObject coord = hit.transform.gameObject;
+                    PlayerManager.Instance.deplacement(coord.GetComponent<Objectif>()._case);
+                }
             }
         }
 	}

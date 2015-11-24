@@ -15,8 +15,10 @@ public class Player : MonoBehaviour {
     public int _orientationX;
     public int _orientationY;
     private bool _hasContreAttack;
-
+    private bool _possessObjectif;
     private int _score;
+    public Vector3 _spawnPoint;
+    public int _scoreMax;
 
     // Use this for initialization
     void Start ()
@@ -33,6 +35,8 @@ public class Player : MonoBehaviour {
         _orientationY = -1;
         _hasContreAttack = false;
         _score = 0;
+        _possessObjectif = false;
+        _scoreMax = 5;
     }
 	
 
@@ -54,6 +58,11 @@ public class Player : MonoBehaviour {
     public int GetPorte()
     {
         return _porte;
+    }
+
+    public int GetScore()
+    {
+        return _score;
     }
 
     public int GetCoutStaminaAttaque()
@@ -83,21 +92,61 @@ public class Player : MonoBehaviour {
         _stamina -= deplacement;
     }
 
-    public void TakeDamage(int damage)
+    public void Reset()
     {
-        Debug.Log("take damage");
+        _life = 100;
+        _stamina = _staminaMax;
+        SetOrientation(0, -1);
+        transform.position = _spawnPoint;
+    }
+
+    public bool TakeDamage(int damage)
+    {
+        //Debug.Log("take damage");
         _life -= damage;
         if(_life <= 0)
         {
-            Debug.Log("mort");
+            Reset();
+            return true;
         }
+        return false;
+    }
+
+    public void SetSpawnPoint()
+    {
+        _spawnPoint = transform.position;
+    }
+
+    public void PossessBonus()
+    {
+        _possessObjectif = true;
+    }
+
+    public void UnpossessBonus()
+    {
+        _possessObjectif = false;
     }
 
     public void Attack(GameObject playerSend)
     {
         Consume(_coutStaminaAttaque);
-        playerSend.GetComponent<Player>().TakeDamage(_attaque);
+        bool dead = playerSend.GetComponent<Player>().TakeDamage(_attaque);
         playerSend.GetComponent<Player>().ContreAttack(gameObject);
+        if(dead)
+        {
+            _score += 2;
+            if(_possessObjectif)
+            {
+                _score ++;
+            }
+            PlayerManager.Instance.RefreshScorePlayers();
+
+            if(_score >= _scoreMax)
+            {
+                Debug.Log("Partie Fini !!");
+                EndingManager.Instance.AfficheFin();
+            }
+        }
     }
 
     public void ContreAttack(GameObject playerSend)
@@ -105,7 +154,7 @@ public class Player : MonoBehaviour {
         if(!_hasContreAttack && _stamina >= _coutStaminaContreAttaque)
         {
             Vector3 diff = transform.position - playerSend.transform.position;
-            Debug.Log(diff.x);
+           // Debug.Log(diff.x);
             bool canContreAttack = false;
             if (diff.x >= 1 && _orientationX == -1)// va à gauche
                 canContreAttack = true;

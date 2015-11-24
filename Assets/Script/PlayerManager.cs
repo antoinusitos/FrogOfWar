@@ -13,6 +13,9 @@ public class PlayerManager : MonoBehaviour {
 
     public GameObject _staminaValue;
 
+    public GameObject _player1Score;
+    public GameObject _player2Score;
+
     private static PlayerManager instance;
 
     public static PlayerManager Instance
@@ -36,8 +39,16 @@ public class PlayerManager : MonoBehaviour {
         GameObject caseP2 = PlateauManager.Instance.GetCaseSpawnPlayer(2);
         _player1Instance = (GameObject)Instantiate(_player1Prefab, caseP1.transform.position - new Vector3(0, 0, .5f), Quaternion.identity);
         _player1Instance.GetComponent<Player>().SetCase(caseP1);
+        _player1Instance.GetComponent<Player>().SetSpawnPoint();
         _player2Instance = (GameObject)Instantiate(_player2Prefab, caseP2.transform.position - new Vector3(0, 0, .5f), Quaternion.identity);
         _player2Instance.GetComponent<Player>().SetCase(caseP2);
+        _player2Instance.GetComponent<Player>().SetSpawnPoint();
+    }
+
+    public void RefreshScorePlayers()
+    {
+        _player1Score.GetComponent<Text>().text = _player1Instance.GetComponent<Player>().GetScore().ToString();
+        _player2Score.GetComponent<Text>().text = _player2Instance.GetComponent<Player>().GetScore().ToString();
     }
 
     public void EndTurn()
@@ -96,7 +107,10 @@ public class PlayerManager : MonoBehaviour {
 
             float dist = Vector3.Distance(currentCase.transform.position, theCase.transform.position);
             //Debug.Log(dist);
-            currentPlayer.transform.position = new Vector3(theCoord._x, theCoord._y, -1f);
+            float Z = -1f;
+            if (theCase.GetComponent<Objectif>())
+                Z = 0f;
+            currentPlayer.transform.position = new Vector3(theCoord._x, theCoord._y, Z);
             theCase.GetComponent<Case>().SetOccupe(true);
             currentPlayer.GetComponent<Player>().GetCase().GetComponent<Case>().SetOccupe(false);
             currentPlayer.GetComponent<Player>().SetCase(theCase);
@@ -140,5 +154,17 @@ public class PlayerManager : MonoBehaviour {
             }
         }
         ActualiseStaminaText();
+    }
+
+    public void PossessObjectif()
+    {
+        if (_tourJoueur1) // tour joueur 1
+        {
+            _player1Instance.GetComponent<Player>().PossessBonus();
+        }
+        else
+        {
+            _player2Instance.GetComponent<Player>().PossessBonus();
+        }
     }
 }

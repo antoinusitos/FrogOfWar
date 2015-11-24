@@ -75,4 +75,10 @@ public class PlateauManager : MonoBehaviour {
             return null;
         }
     }
+
+    public GameObject GetMilieu()
+    {
+        int index = ((_largeur/2) * _longueur) + _longueur/2;
+        return _plateau[index];
+    }
 }

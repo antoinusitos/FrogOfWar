@@ -68,13 +68,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Script\BonusManager.cs" />
     <Compile Include="Assets\Script\Case.cs" />
+    <Compile Include="Assets\Script\EndingManager.cs" />
     <Compile Include="Assets\Script\FinTourBouton.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\InputManager.cs" />
+    <Compile Include="Assets\Script\Objectif.cs" />
     <Compile Include="Assets\Script\PlateauManager.cs" />
     <Compile Include="Assets\Script\Player.cs" />
     <Compile Include="Assets\Script\PlayerManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\shader\FogOfWarGeom.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
