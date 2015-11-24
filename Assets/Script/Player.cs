@@ -16,6 +16,8 @@ public class Player : MonoBehaviour {
     public int _orientationY;
     private bool _hasContreAttack;
 
+    private int _score;
+
     // Use this for initialization
     void Start ()
     {
@@ -30,6 +32,7 @@ public class Player : MonoBehaviour {
         _orientationX = 0;
         _orientationY = -1;
         _hasContreAttack = false;
+        _score = 0;
     }
 	
 
@@ -67,6 +70,7 @@ public class Player : MonoBehaviour {
     {
         _staminaMax = Mathf.Min(_staminaMax, _palierStaminaMax);
         _stamina = _staminaMax;
+        _hasContreAttack = false;
     }
 
     public void BoostStamina()
@@ -100,9 +104,30 @@ public class Player : MonoBehaviour {
     {
         if(!_hasContreAttack && _stamina >= _coutStaminaContreAttaque)
         {
-            _hasContreAttack = true;
-            playerSend.GetComponent<Player>().TakeDamage(_attaque);
-            Consume(_coutStaminaContreAttaque);
+            Vector3 diff = transform.position - playerSend.transform.position;
+            Debug.Log(diff.x);
+            bool canContreAttack = false;
+            if (diff.x >= 1 && _orientationX == -1)// va à gauche
+                canContreAttack = true;
+            else if (diff.x <= -1 && _orientationX == 1)// va à droite
+                canContreAttack = true;
+            else if (diff.y <= -1 && _orientationY == 1)// va en haut
+                canContreAttack = true;
+            else if (diff.y >= 1 && _orientationY == -1)// va en bas
+                canContreAttack = true;
+
+            if (canContreAttack)
+            {
+                _hasContreAttack = true;
+                playerSend.GetComponent<Player>().TakeDamage(_attaque);
+                Consume(_coutStaminaContreAttaque);
+            }
         }
+    }
+
+    public void SetOrientation(int X, int Y)
+    {
+        _orientationX = X;
+        _orientationY = Y;
     }
 }

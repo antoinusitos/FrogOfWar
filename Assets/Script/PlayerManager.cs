@@ -11,7 +11,7 @@ public class PlayerManager : MonoBehaviour {
     private GameObject _player1Instance;
     private GameObject _player2Instance;
 
-    public GameObject _staminaText;
+    public GameObject _staminaValue;
 
     private static PlayerManager instance;
 
@@ -78,13 +78,24 @@ public class PlayerManager : MonoBehaviour {
         {
             currentPlayer = _player2Instance;
         }
+
         Case.coordonees theCoord = theCase.GetComponent<Case>().GetCoordonnees();
         GameObject currentCase = currentPlayer.GetComponent<Player>().GetCase();
         int currentStamina = currentPlayer.GetComponent<Player>().GetStamina();
         if (!theCoord._occcupe && Vector3.Distance(currentCase.transform.position, theCase.transform.position) <= currentStamina)
         {
+            Vector3 diff = currentCase.transform.position - theCase.transform.position;
+            if (diff.x <= -1)// va à droite
+                currentPlayer.GetComponent<Player>().SetOrientation(1, 0);
+            else if (diff.x >= 1)// va à gauche
+                currentPlayer.GetComponent<Player>().SetOrientation(-1, 0);
+            else if (diff.y >= 1)// va en bas
+                currentPlayer.GetComponent<Player>().SetOrientation(0, -1);
+            else if (diff.y <= -1)// va en haut
+                currentPlayer.GetComponent<Player>().SetOrientation(0, 1);
+
             float dist = Vector3.Distance(currentCase.transform.position, theCase.transform.position);
-            Debug.Log(dist);
+            //Debug.Log(dist);
             currentPlayer.transform.position = new Vector3(theCoord._x, theCoord._y, -1f);
             theCase.GetComponent<Case>().SetOccupe(true);
             currentPlayer.GetComponent<Player>().GetCase().GetComponent<Case>().SetOccupe(false);
@@ -98,11 +109,11 @@ public class PlayerManager : MonoBehaviour {
     {
         if (_tourJoueur1) // tour joueur 1
         {
-            _staminaText.GetComponent<Text>().text = _player1Instance.GetComponent<Player>().GetStamina().ToString();
+            _staminaValue.GetComponent<Text>().text = _player1Instance.GetComponent<Player>().GetStamina().ToString();
         }
         else
         {
-            _staminaText.GetComponent<Text>().text = _player2Instance.GetComponent<Player>().GetStamina().ToString();
+            _staminaValue.GetComponent<Text>().text = _player2Instance.GetComponent<Player>().GetStamina().ToString();
         }
     }
 
