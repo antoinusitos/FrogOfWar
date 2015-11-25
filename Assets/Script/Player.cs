@@ -10,6 +10,7 @@ public class Player : MonoBehaviour {
     public int _palierStaminaMax;
     public int _attaque;
     public int _porte;
+    public int _shield;
     public int _coutStaminaAttaque;
     public int _coutStaminaContreAttaque;
     public int _orientationX;
@@ -22,6 +23,11 @@ public class Player : MonoBehaviour {
 
     public Transform FogOfWarPlane;
     public int Number = 1;
+
+    public GameObject ConeD;
+    public GameObject ConeG;
+    public GameObject ConeH;
+    public GameObject ConeB;
 
     // Use this for initialization
     void Start ()
@@ -40,20 +46,7 @@ public class Player : MonoBehaviour {
         _score = 0;
         _possessObjectif = false;
         _scoreMax = 5;
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-        Ray rayToPlayerPos = Camera.main.ScreenPointToRay(screenPos);
-        int layermask = (int)(1 << 8);
-        RaycastHit hit;
-        if (Physics.Raycast(rayToPlayerPos, out hit, 1000, layermask))
-        {
-            FogOfWarPlane.GetComponent<Renderer>().material.SetVector("_Player" + Number.ToString() + "_Pos", hit.point);
-        }
+        _shield = 0;
     }
 
     public GameObject GetCase()
@@ -119,11 +112,18 @@ public class Player : MonoBehaviour {
     public bool TakeDamage(int damage)
     {
         //Debug.Log("take damage");
-        _life -= damage;
-        if(_life <= 0)
+        int degats = damage;
+        int prevShield = _shield;
+        _shield -= degats;
+        degats -= prevShield;
+        if (degats > 0)
         {
-            Reset();
-            return true;
+            _life -= degats;
+            if (_life <= 0)
+            {
+                Reset();
+                return true;
+            }
         }
         return false;
     }
@@ -194,5 +194,30 @@ public class Player : MonoBehaviour {
     {
         _orientationX = X;
         _orientationY = Y;
+        HideCone();
+        if(_orientationX == 1 && _orientationY == 0)
+        {
+            ConeD.SetActive(true);
+        }
+        else if (_orientationX == -1 && _orientationY == 0)
+        {
+            ConeG.SetActive(true);
+        }
+        else if (_orientationX == 0 && _orientationY == 1)
+        {
+            ConeH.SetActive(true);
+        }
+        else if (_orientationX == 0 && _orientationY == -1)
+        {
+            ConeB.SetActive(true);
+        }
+    }
+
+    public void HideCone()
+    {
+        ConeD.SetActive(false);
+        ConeG.SetActive(false);
+        ConeH.SetActive(false);
+        ConeB.SetActive(false);
     }
 }
