@@ -33,16 +33,20 @@ public class PlayerManager : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-    public void SpawnPlayers()
+    public void SpawnPlayers(GameObject _plateau)
     {
         GameObject caseP1 = PlateauManager.Instance.GetCaseSpawnPlayer(1);
         GameObject caseP2 = PlateauManager.Instance.GetCaseSpawnPlayer(2);
         _player1Instance = (GameObject)Instantiate(_player1Prefab, caseP1.transform.position - new Vector3(0, 0, .5f), Quaternion.identity);
         _player1Instance.GetComponent<Player>().SetCase(caseP1);
         _player1Instance.GetComponent<Player>().SetSpawnPoint();
+        _player1Instance.transform.parent = _plateau.transform;
+        _player1Instance.GetComponent<Revealer>().Register();
         _player2Instance = (GameObject)Instantiate(_player2Prefab, caseP2.transform.position - new Vector3(0, 0, .5f), Quaternion.identity);
         _player2Instance.GetComponent<Player>().SetCase(caseP2);
         _player2Instance.GetComponent<Player>().SetSpawnPoint();
+        _player2Instance.transform.parent = _plateau.transform;
+        _player2Instance.GetComponent<Revealer>().Register();
     }
 
     public void RefreshScorePlayers()
@@ -165,6 +169,34 @@ public class PlayerManager : MonoBehaviour {
         else
         {
             _player2Instance.GetComponent<Player>().PossessBonus();
+        }
+    }
+
+    public GameObject GetPlayerTurn()
+    {
+        if (_tourJoueur1) // tour joueur 1
+        {
+            return _player1Instance;
+        }
+        else
+        {
+            return _player2Instance;
+        }
+    }
+
+    public void ResetPlayer(int pl)
+    {
+        if (pl == 1) // tour joueur 1
+        {
+            GameObject currentCase = _player1Instance.GetComponent<Player>().GetCase();
+            currentCase.GetComponent<Case>().SetOccupe(false);
+            _player1Instance.GetComponent<Player>().SetCase(PlateauManager.Instance.GetCaseSpawnPlayer(1));
+        }
+        else
+        {
+            GameObject currentCase = _player2Instance.GetComponent<Player>().GetCase();
+            currentCase.GetComponent<Case>().SetOccupe(false);
+            _player2Instance.GetComponent<Player>().SetCase(PlateauManager.Instance.GetCaseSpawnPlayer(2));
         }
     }
 }

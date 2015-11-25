@@ -27,10 +27,8 @@ public class PlateauManager : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-    public void InitPlateau()
+    public void InitPlateau(GameObject _p)
     {
-        _p = new GameObject();
-        _p.name = "plateau";
         _totalCases = _longueur * _largeur;
         _plateau = new GameObject[_totalCases];
         for (int i = 0; i < _totalCases; ++i)
@@ -59,6 +57,11 @@ public class PlateauManager : MonoBehaviour {
         }
     }
 
+    public int GetIndex(int X, int Y)
+    {
+        return (Y * _longueur) + X;
+    }
+
     public GameObject GetCaseSpawnPlayer(int nb)
     {
         if(nb == 1)
@@ -80,5 +83,19 @@ public class PlateauManager : MonoBehaviour {
     {
         int index = ((_largeur/2) * _longueur) + _longueur/2;
         return _plateau[index];
+    }
+
+    public GameObject[] GetLootPos()
+    {
+        GameObject[] retour = new GameObject[4];
+        int index = GetIndex(3, 1);
+        retour[0] = _plateau[index];
+        index = GetIndex(11, 1);
+        retour[1] = _plateau[index];
+        index = GetIndex(3, 7);
+        retour[2] = _plateau[index];
+        index = GetIndex(11, 7);
+        retour[3] = _plateau[index];
+        return retour;
     }
 }

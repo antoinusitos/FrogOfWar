@@ -7,4 +7,14 @@ public class FinTourBouton : MonoBehaviour {
     {
         PlayerManager.Instance.EndTurn();
     }
+
+    public void Abandonner()
+    {
+        GameManager.Instance.FinGame();
+    }
+
+    public void Menu()
+    {
+        GameManager.Instance.MenuGame();
+    }
 }

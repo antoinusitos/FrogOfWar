@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-	    if(Input.GetMouseButtonDown(0))
+	    if(Input.GetMouseButtonDown(0) && GameManager.Instance._state == GameManager.GameState.inGame)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -45,6 +45,12 @@ public class InputManager : MonoBehaviour {
                     PlayerManager.Instance.PossessObjectif();
                     GameObject coord = hit.transform.gameObject;
                     PlayerManager.Instance.deplacement(coord.GetComponent<Objectif>()._case);
+                }
+                else if (hit.transform.GetComponent<Loot>())
+                {
+                    GameObject coord = hit.transform.gameObject;
+                    coord.GetComponent<Loot>().Pickup(PlayerManager.Instance.GetPlayerTurn());
+                    PlayerManager.Instance.deplacement(coord.GetComponent<Loot>()._case);
                 }
             }
         }

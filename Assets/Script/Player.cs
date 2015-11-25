@@ -11,6 +11,8 @@ public class Player : MonoBehaviour {
     public int _attaque;
     public int _porte;
     public int _shield;
+    public int _kills;
+    public int _death;
     public int _coutStaminaAttaque;
     public int _coutStaminaContreAttaque;
     public int _orientationX;
@@ -18,6 +20,7 @@ public class Player : MonoBehaviour {
     private bool _hasContreAttack;
     private bool _possessObjectif;
     private int _score;
+    private int _pieges;
     public Vector3 _spawnPoint;
     public int _scoreMax;
 
@@ -36,7 +39,7 @@ public class Player : MonoBehaviour {
         _staminaMax = 3;
         _stamina = _staminaMax;
         _palierStaminaMax = 9;
-        _attaque = 30;
+        _attaque = 20;
         _porte = 1;
         _coutStaminaAttaque = 3;
         _coutStaminaContreAttaque = 3;
@@ -47,6 +50,8 @@ public class Player : MonoBehaviour {
         _possessObjectif = false;
         _scoreMax = 5;
         _shield = 0;
+        _kills = 0;
+        _death = 0;
     }
 
     public GameObject GetCase()
@@ -104,6 +109,7 @@ public class Player : MonoBehaviour {
     public void Reset()
     {
         _life = 100;
+        _staminaMax = 3;
         _stamina = _staminaMax;
         SetOrientation(0, -1);
         transform.position = _spawnPoint;
@@ -121,6 +127,7 @@ public class Player : MonoBehaviour {
             _life -= degats;
             if (_life <= 0)
             {
+                _death++;
                 Reset();
                 return true;
             }
@@ -150,6 +157,7 @@ public class Player : MonoBehaviour {
         playerSend.GetComponent<Player>().ContreAttack(gameObject);
         if(dead)
         {
+            _kills++;
             _score += 2;
             if(_possessObjectif)
             {
@@ -219,5 +227,20 @@ public class Player : MonoBehaviour {
         ConeG.SetActive(false);
         ConeH.SetActive(false);
         ConeB.SetActive(false);
+    }
+
+    public void AjouterAttaque(int value)
+    {
+        _attaque += value;
+    }
+
+    public void AjouterShield(int value)
+    {
+        _shield += value;
+    }
+
+    public void AjouterPiege(int value)
+    {
+        _pieges += value;
     }
 }
