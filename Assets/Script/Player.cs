@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
+    public int _playerNumber;
     private int _life;
     private GameObject _currentCase;
     private int _stamina;
@@ -36,9 +37,9 @@ public class Player : MonoBehaviour {
     void Start ()
     {
         _life = 100;
-        _staminaMax = 3;
+        _staminaMax = 2;
         _stamina = _staminaMax;
-        _palierStaminaMax = 9;
+        _palierStaminaMax = 5;
         _attaque = 20;
         _porte = 1;
         _coutStaminaAttaque = 3;
@@ -52,6 +53,8 @@ public class Player : MonoBehaviour {
         _shield = 0;
         _kills = 0;
         _death = 0;
+        PlayerManager.Instance.ActualiseStaminaText();
+        PlayerManager.Instance.NewTurn();
     }
 
     public GameObject GetCase()
@@ -109,10 +112,11 @@ public class Player : MonoBehaviour {
     public void Reset()
     {
         _life = 100;
-        _staminaMax = 3;
+        //_staminaMax = 3;
         _stamina = _staminaMax;
         SetOrientation(0, -1);
         transform.position = _spawnPoint;
+        PlayerManager.Instance.ResetPlayer(_playerNumber);
     }
 
     public bool TakeDamage(int damage)
@@ -168,7 +172,7 @@ public class Player : MonoBehaviour {
             if(_score >= _scoreMax)
             {
                 Debug.Log("Partie Fini !!");
-                EndingManager.Instance.AfficheFin();
+                GameManager.Instance.FinGame();
             }
         }
     }
@@ -192,8 +196,25 @@ public class Player : MonoBehaviour {
             if (canContreAttack)
             {
                 _hasContreAttack = true;
-                playerSend.GetComponent<Player>().TakeDamage(_attaque);
                 Consume(_coutStaminaContreAttaque);
+                bool dead = playerSend.GetComponent<Player>().TakeDamage(_attaque);
+                playerSend.GetComponent<Player>().ContreAttack(gameObject);
+                if (dead)
+                {
+                    _kills++;
+                    _score += 2;
+                    if (_possessObjectif)
+                    {
+                        _score++;
+                    }
+                    PlayerManager.Instance.RefreshScorePlayers();
+
+                    if (_score >= _scoreMax)
+                    {
+                        Debug.Log("Partie Fini !!");
+                        GameManager.Instance.FinGame();
+                    }
+                }
             }
         }
     }

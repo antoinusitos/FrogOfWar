@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour {
         BonusManager.Instance.SpawnLoot(_plateau);
         UIManager.Instance.LaunchGame();
         PlayerManager.Instance.RefreshScorePlayers();
-        PlayerManager.Instance.ActualiseStaminaText();
     }
 
     public void FinGame()

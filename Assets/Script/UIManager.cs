@@ -49,7 +49,7 @@ public class UIManager : MonoBehaviour {
     public void EndGame()
     {
         InGame.SetActive(false);
-        FOV.SetActive(false);
+        FOV.SetActive(true);
         Menu.SetActive(false);
         Ending.SetActive(true);
     }

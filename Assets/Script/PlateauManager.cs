@@ -9,6 +9,10 @@ public class PlateauManager : MonoBehaviour {
     public GameObject[] _plateau;
     private int _totalCases = 0;
     private GameObject _p;
+    GameObject[] CaseToMove;
+
+    public Material _walkable;
+    public Material _defaultMat;
 
     private static PlateauManager instance;
 
@@ -97,5 +101,38 @@ public class PlateauManager : MonoBehaviour {
         index = GetIndex(11, 7);
         retour[3] = _plateau[index];
         return retour;
+    }
+
+    public void ShowMoveCase(GameObject theCase, int stamina)
+    {
+        CaseToMove = new GameObject[(int)Mathf.Pow(8, stamina)];
+        int index = 0;
+        for (int i = 0; i < _plateau.Length; i++)
+        {
+            if (theCase != _plateau[i] && Mathf.Ceil(Vector3.Distance(theCase.transform.position, _plateau[i].transform.position)) <= stamina)
+            {
+                CaseToMove[index] = _plateau[i];
+                index++;
+            }
+        }
+
+        for (int i = 0; i < CaseToMove.Length; i++)
+        {
+            if(CaseToMove[i] != null)
+            {
+                CaseToMove[i].GetComponent<Case>().Walkable();
+            }
+        }
+    }
+
+    public void ResetMoveCase()
+    {
+        for (int i = 0; i < CaseToMove.Length; i++)
+        {
+            if (CaseToMove[i] != null)
+            {
+                CaseToMove[i].GetComponent<Case>().ResetMaterial();
+            }
+        }
     }
 }

@@ -52,4 +52,14 @@ public class Case : MonoBehaviour {
     {
         _occcupe = newState;
     }
+
+    public void Walkable()
+    {
+        GetComponent<MeshRenderer>().material = PlateauManager.Instance._walkable;
+    }
+
+    public void ResetMaterial()
+    {
+        GetComponent<MeshRenderer>().material = PlateauManager.Instance._defaultMat;
+    }
 }

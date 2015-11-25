@@ -42,11 +42,13 @@ public class PlayerManager : MonoBehaviour {
         _player1Instance.GetComponent<Player>().SetSpawnPoint();
         _player1Instance.transform.parent = _plateau.transform;
         _player1Instance.GetComponent<Revealer>().Register();
+        _player1Instance.GetComponent<Player>().Reset();
         _player2Instance = (GameObject)Instantiate(_player2Prefab, caseP2.transform.position - new Vector3(0, 0, .5f), Quaternion.identity);
         _player2Instance.GetComponent<Player>().SetCase(caseP2);
         _player2Instance.GetComponent<Player>().SetSpawnPoint();
         _player2Instance.transform.parent = _plateau.transform;
         _player2Instance.GetComponent<Revealer>().Register();
+        _player2Instance.GetComponent<Player>().Reset();
     }
 
     public void RefreshScorePlayers()
@@ -57,6 +59,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void EndTurn()
     {
+        PlateauManager.Instance.ResetMoveCase();
         if (_tourJoueur1) // tour joueur 1
         {
             _player1Instance.GetComponent<Player>().BoostStamina();
@@ -69,17 +72,22 @@ public class PlayerManager : MonoBehaviour {
         NewTurn();
     }
 
-    void NewTurn()
+    public void NewTurn()
     {
-        if(_tourJoueur1) // tour joueur 1
+
+        GameObject currentPlayer = null;
+        if (_tourJoueur1) // tour joueur 1
         {
             _player1Instance.GetComponent<Player>().RefillStamina();
+            currentPlayer = _player1Instance;
         }
         else // tour joueur 2
         {
             _player2Instance.GetComponent<Player>().RefillStamina();
+            currentPlayer = _player2Instance;
         }
         ActualiseStaminaText();
+        PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
     }
 
     public void deplacement(GameObject theCase)
@@ -119,6 +127,9 @@ public class PlayerManager : MonoBehaviour {
             currentPlayer.GetComponent<Player>().GetCase().GetComponent<Case>().SetOccupe(false);
             currentPlayer.GetComponent<Player>().SetCase(theCase);
             currentPlayer.GetComponent<Player>().Consume((int)Mathf.Ceil(dist));
+
+            PlateauManager.Instance.ResetMoveCase();
+            PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
         }
         ActualiseStaminaText();
     }
