@@ -8,6 +8,10 @@ public class BonusManager : MonoBehaviour {
     private GameObject _objectifInstance;
     private GameObject[] _bonus;
 
+    public Sprite _attackSprite;
+    public Sprite _defenseSprite;
+    public Sprite _objectSprite;
+
     private static BonusManager instance;
 
     public static BonusManager Instance
@@ -51,5 +55,23 @@ public class BonusManager : MonoBehaviour {
         _objectifInstance.GetComponent<MeshRenderer>().enabled = true;
         _objectifInstance.GetComponent<Objectif>().Unpossess();
         _objectifInstance.GetComponent<Objectif>().setCase(currentCase);
+    }
+
+    public void ShowSprite(GameObject player, int theSprite)
+    {
+        if (theSprite != -1)
+        {
+            player.transform.GetChild(4).gameObject.SetActive(true);
+            if (theSprite == 0)
+                player.transform.GetChild(4).gameObject.GetComponent<SpriteRenderer>().sprite = _attackSprite;
+            else if (theSprite == 1)
+                player.transform.GetChild(4).gameObject.GetComponent<SpriteRenderer>().sprite = _defenseSprite;
+            else if (theSprite == 2)
+                player.transform.GetChild(4).gameObject.GetComponent<SpriteRenderer>().sprite = _objectSprite;
+        }
+        else
+        {
+            player.transform.GetChild(4).gameObject.SetActive(false);
+        }
     }
 }

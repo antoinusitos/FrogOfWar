@@ -14,12 +14,18 @@ public class Objectif : MonoBehaviour {
     public void Possess()
     {
         _possessed = true;
+        SoundManager.Instance.Relic();
         //Debug.Log("possess");
     }
 
     public void Unpossess()
     {
         _possessed = false;
+    }
+
+    public bool GetPossess()
+    {
+        return _possessed;
     }
 
     public void setCase(GameObject currentCase)

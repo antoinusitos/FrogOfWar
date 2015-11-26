@@ -39,7 +39,7 @@ public class InputManager : MonoBehaviour {
                 {
                     PlayerManager.Instance.WantToAttack(hit.transform.gameObject);
                 }
-                else if (hit.transform.GetComponent<Objectif>())
+                else if (hit.transform.GetComponent<Objectif>() && hit.transform.GetComponent<Objectif>().GetPossess() == false)
                 {
                     GameObject coord = hit.transform.gameObject;
                     hit.transform.GetComponent<MeshRenderer>().enabled = false;

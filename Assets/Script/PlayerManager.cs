@@ -111,12 +111,12 @@ public class PlayerManager : MonoBehaviour {
     public void HidePlayers()
     {
         _player1Instance.GetComponent<MeshRenderer>().enabled = false;
-        for (int i = 0; i < _player1Instance.transform.childCount; i++)
+        for (int i = 0; i < _player1Instance.transform.childCount - 1; i++)
         {
             _player1Instance.transform.GetChild(i).GetComponent<MeshRenderer>().enabled = false;
         }
         _player2Instance.GetComponent<MeshRenderer>().enabled = false;
-        for (int i = 0; i < _player2Instance.transform.childCount; i++)
+        for (int i = 0; i < _player2Instance.transform.childCount - 1; i++)
         {
             _player2Instance.transform.GetChild(i).GetComponent<MeshRenderer>().enabled = false;
         }
@@ -125,12 +125,12 @@ public class PlayerManager : MonoBehaviour {
     public void ShowPlayers()
     {
         _player1Instance.GetComponent<MeshRenderer>().enabled = true;
-        for (int i = 0; i < _player1Instance.transform.childCount; i++)
+        for (int i = 0; i < _player1Instance.transform.childCount - 1; i++)
         {
             _player1Instance.transform.GetChild(i).GetComponent<MeshRenderer>().enabled = true;
         }
         _player2Instance.GetComponent<MeshRenderer>().enabled = true;
-        for (int i = 0; i < _player2Instance.transform.childCount; i++)
+        for (int i = 0; i < _player2Instance.transform.childCount - 1; i++)
         {
             _player2Instance.transform.GetChild(i).GetComponent<MeshRenderer>().enabled = true;
         }
@@ -178,6 +178,7 @@ public class PlayerManager : MonoBehaviour {
             PlateauManager.Instance.ResetMoveCase();
             PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
             GameManager.Instance.SetCameraPos();
+            SoundManager.Instance.Move();
         }
         ActualiseStaminaText();
     }

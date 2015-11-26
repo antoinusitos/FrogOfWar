@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour {
                     Destroy(_plateau);
                     _state = GameState.menu;
                     UIManager.Instance.MenuGame();
+                    SoundManager.Instance.Menu();
                 }
                 SetCameraPos();
                 //Debug.Log("show players");
@@ -85,7 +86,8 @@ public class GameManager : MonoBehaviour {
         _state = GameState.waitPlayer;
         PlayerManager.Instance.HidePlayers();
         UIManager.Instance.Turn();
-       // Debug.Log("StartGame");
+        SoundManager.Instance.Game();
+        // Debug.Log("StartGame");
     }
 
     public void SetCameraPos()

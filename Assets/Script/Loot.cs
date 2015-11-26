@@ -19,6 +19,7 @@ public class Loot : MonoBehaviour {
     {
         if(picker.GetComponent<Player>())
         {
+            SoundManager.Instance.Chest();
             switch (currentBonus)
             {
                 case bonus.attaque:
@@ -34,6 +35,20 @@ public class Loot : MonoBehaviour {
                     break;
             }
         }
+        StartCoroutine(ShowBonus());
+    }
+
+    IEnumerator ShowBonus()
+    {
+        yield return new WaitForSeconds(2);
+        SoundManager.Instance.Bonus();
+        if (currentBonus == bonus.attaque)
+            PlayerManager.Instance.GetPlayerTurn().GetComponent<Player>().ShowBonus(0);
+        else if (currentBonus == bonus.shield)
+            PlayerManager.Instance.GetPlayerTurn().GetComponent<Player>().ShowBonus(1);
+        else if (currentBonus == bonus.piege)
+            PlayerManager.Instance.GetPlayerTurn().GetComponent<Player>().ShowBonus(2);
+        yield return new WaitForSeconds(1);
         Destroy(gameObject);
     }
 }

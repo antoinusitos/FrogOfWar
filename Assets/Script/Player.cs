@@ -36,11 +36,11 @@ public class Player : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        _life = 100;
+        _life = 5;
         _staminaMax = 2;
         _stamina = _staminaMax;
         _palierStaminaMax = 5;
-        _attaque = 20;
+        _attaque = 1;
         _porte = 1;
         _coutStaminaAttaque = 3;
         _coutStaminaContreAttaque = 3;
@@ -173,6 +173,7 @@ public class Player : MonoBehaviour {
     {
         Consume(_coutStaminaAttaque);
         bool dead = playerSend.GetComponent<Player>().TakeDamage(_attaque);
+        SoundManager.Instance.Attack();
         playerSend.GetComponent<Player>().ContreAttack(gameObject);
         if(dead)
         {
@@ -283,5 +284,17 @@ public class Player : MonoBehaviour {
     public bool HasObjectif()
     {
         return _possessObjectif;
+    }
+
+    public void ShowBonus(int bonus)
+    {
+        BonusManager.Instance.ShowSprite(gameObject, bonus);
+        StartCoroutine(StopShow());
+    }
+
+    IEnumerator StopShow()
+    {
+        yield return new WaitForSeconds(1);
+        ShowBonus(-1);
     }
 }
