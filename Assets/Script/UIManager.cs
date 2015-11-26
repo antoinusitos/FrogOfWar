@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class UIManager : MonoBehaviour {
@@ -9,6 +10,14 @@ public class UIManager : MonoBehaviour {
     public GameObject _ending;
     public GameObject _turnButton;
 
+    public Sprite _fiveStamina;
+    public Sprite _fourStamina;
+    public Sprite _threeStamina;
+    public Sprite _twoStamina;
+    public Sprite _oneStamina;
+    public Sprite _zeroStamina;
+
+    public GameObject _spriteObject;
 
     private static UIManager instance;
 
@@ -29,6 +38,22 @@ public class UIManager : MonoBehaviour {
     void Start()
     {
         MenuGame();
+    }
+
+    public void SetSpriteStamina(int nb)
+    {
+        if (nb == 0)
+            _spriteObject.GetComponent<Image>().sprite = _zeroStamina;
+        else if (nb == 1)
+            _spriteObject.GetComponent<Image>().sprite = _oneStamina;
+        else if (nb == 2)
+            _spriteObject.GetComponent<Image>().sprite = _twoStamina;
+        else if (nb == 3)
+            _spriteObject.GetComponent<Image>().sprite = _threeStamina;
+        else if (nb == 4)
+            _spriteObject.GetComponent<Image>().sprite = _fourStamina;
+        else if (nb == 5)
+            _spriteObject.GetComponent<Image>().sprite = _fiveStamina;
     }
 
     public void MenuGame()

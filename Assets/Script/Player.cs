@@ -36,7 +36,7 @@ public class Player : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        _life = 5;
+        _life = 3;
         _staminaMax = 2;
         _stamina = _staminaMax;
         _palierStaminaMax = 5;
@@ -117,6 +117,7 @@ public class Player : MonoBehaviour {
     public void Consume(int deplacement)
     {
         _stamina -= deplacement;
+        UIManager.Instance.SetSpriteStamina(_stamina);
     }
 
     public void Reset()
@@ -178,7 +179,7 @@ public class Player : MonoBehaviour {
         if(dead)
         {
             _kills++;
-            _score += 2;
+            _score += 1;
             if(_possessObjectif)
             {
                 _score ++;
@@ -218,7 +219,7 @@ public class Player : MonoBehaviour {
                 if (dead)
                 {
                     _kills++;
-                    _score += 2;
+                    _score += 1;
                     if (_possessObjectif)
                     {
                         _score++;

@@ -91,7 +91,7 @@ public class PlayerManager : MonoBehaviour {
             _player2Instance.GetComponent<Player>().RefillStamina();
         }
         ActualiseStaminaText();
-       // PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
+        // PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
     }
 
     public void showCases()
@@ -187,11 +187,11 @@ public class PlayerManager : MonoBehaviour {
     {
         if (_tourJoueur1) // tour joueur 1
         {
-            _staminaValue.GetComponent<Text>().text = _player1Instance.GetComponent<Player>().GetStamina().ToString();
+            UIManager.Instance.SetSpriteStamina(_player1Instance.GetComponent<Player>().GetStamina());
         }
         else
         {
-            _staminaValue.GetComponent<Text>().text = _player2Instance.GetComponent<Player>().GetStamina().ToString();
+            UIManager.Instance.SetSpriteStamina(_player2Instance.GetComponent<Player>().GetStamina());
         }
     }
 
