@@ -83,6 +83,7 @@
     <Compile Include="Assets\Script\PlayerManager.cs" />
     <Compile Include="Assets\Script\Revealer.cs" />
     <Compile Include="Assets\Script\SceneFadeInOut.cs" />
+    <Compile Include="Assets\Script\ScoreManager.cs" />
     <Compile Include="Assets\Script\TurnButton.cs" />
     <Compile Include="Assets\Script\UIManager.cs" />
   </ItemGroup>

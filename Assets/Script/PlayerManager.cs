@@ -37,13 +37,13 @@ public class PlayerManager : MonoBehaviour {
     {
         GameObject caseP1 = PlateauManager.Instance.GetCaseSpawnPlayer(1);
         GameObject caseP2 = PlateauManager.Instance.GetCaseSpawnPlayer(2);
-        _player1Instance = (GameObject)Instantiate(_player1Prefab, caseP1.transform.position - new Vector3(0, 0, .5f), Quaternion.identity);
+        _player1Instance = (GameObject)Instantiate(_player1Prefab, caseP1.transform.position + new Vector3(0, 0, 1f), Quaternion.identity);
         _player1Instance.GetComponent<Player>().SetCase(caseP1);
         _player1Instance.GetComponent<Player>().SetSpawnPoint();
         _player1Instance.transform.parent = _plateau.transform;
         _player1Instance.GetComponent<Revealer>().Register();
         _player1Instance.GetComponent<Player>().Reset();
-        _player2Instance = (GameObject)Instantiate(_player2Prefab, caseP2.transform.position - new Vector3(0, 0, .5f), Quaternion.identity);
+        _player2Instance = (GameObject)Instantiate(_player2Prefab, caseP2.transform.position + new Vector3(0, 0, 1f), Quaternion.identity);
         _player2Instance.GetComponent<Player>().SetCase(caseP2);
         _player2Instance.GetComponent<Player>().SetSpawnPoint();
         _player2Instance.transform.parent = _plateau.transform;
@@ -64,7 +64,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void EndTurn()
     {
-        Debug.Log("PlayerManager : EndTurn");
+        //Debug.Log("PlayerManager : EndTurn");
         PlateauManager.Instance.ResetMoveCase();
         if (_tourJoueur1) // tour joueur 1
         {
@@ -80,7 +80,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void NewTurn()
     {
-        Debug.Log("PlayerManager : newTurn");
+        //Debug.Log("PlayerManager : newTurn");
         GameManager.Instance.EndTurn();
         if (_tourJoueur1) // tour joueur 1
         {
@@ -151,7 +151,8 @@ public class PlayerManager : MonoBehaviour {
         Case.coordonees theCoord = theCase.GetComponent<Case>().GetCoordonnees();
         GameObject currentCase = currentPlayer.GetComponent<Player>().GetCase();
         int currentStamina = currentPlayer.GetComponent<Player>().GetStamina();
-        if (!theCoord._occcupe && Vector3.Distance(currentCase.transform.position, theCase.transform.position) <= currentStamina)
+        int multiply = currentPlayer.GetComponent<Player>().HasObjectif() ? 2 : 1;
+        if (!theCoord._occcupe && Vector3.Distance(currentCase.transform.position, theCase.transform.position) * multiply <= currentStamina)
         {
             Vector3 diff = currentCase.transform.position - theCase.transform.position;
             if (diff.x <= -1)// va à droite
@@ -165,14 +166,14 @@ public class PlayerManager : MonoBehaviour {
 
             float dist = Vector3.Distance(currentCase.transform.position, theCase.transform.position);
             //Debug.Log(dist);
-            float Z = -1f;
+            float Z = 1f;
             if (theCase.GetComponent<Objectif>())
                 Z = 0f;
             currentPlayer.transform.position = new Vector3(theCoord._x, theCoord._y, Z);
             theCase.GetComponent<Case>().SetOccupe(true);
             currentPlayer.GetComponent<Player>().GetCase().GetComponent<Case>().SetOccupe(false);
             currentPlayer.GetComponent<Player>().SetCase(theCase);
-            currentPlayer.GetComponent<Player>().Consume((int)Mathf.Ceil(dist));
+            currentPlayer.GetComponent<Player>().Consume((int)Mathf.Ceil(dist) * multiply);
 
             PlateauManager.Instance.ResetMoveCase();
             PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
@@ -267,6 +268,18 @@ public class PlayerManager : MonoBehaviour {
             GameObject currentCase = _player2Instance.GetComponent<Player>().GetCase();
             currentCase.GetComponent<Case>().SetOccupe(false);
             _player2Instance.GetComponent<Player>().SetCase(PlateauManager.Instance.GetCaseSpawnPlayer(2));
+        }
+    }
+
+    public GameObject GetPlayer(int pl)
+    {
+        if (pl == 1) // tour joueur 1
+        {
+            return _player1Instance;
+        }
+        else
+        {
+            return _player2Instance;
         }
     }
 }

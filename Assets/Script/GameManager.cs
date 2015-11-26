@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour {
                     UIManager.Instance.MenuGame();
                 }
                 SetCameraPos();
-                Debug.Log("show players");
+                //Debug.Log("show players");
             }
         }
     }
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour {
         _state = GameState.waitPlayer;
         PlayerManager.Instance.HidePlayers();
         UIManager.Instance.Turn();
-        Debug.Log("StartGame");
+       // Debug.Log("StartGame");
     }
 
     public void SetCameraPos()
@@ -93,14 +93,14 @@ public class GameManager : MonoBehaviour {
         if(_state == GameState.inGame)
         {
             Vector3 pos = PlayerManager.Instance.GetPlayerTurn().transform.position;
-            pos.z = -6;
+            pos.z = 6;
             Camera.main.transform.position = pos;
             Camera.main.orthographicSize = 2;
         }
         else
         {
             Camera.main.transform.position = _camPosMap.transform.position;
-            Camera.main.orthographicSize = 6;
+            Camera.main.orthographicSize = 5;
         }
     }
 
@@ -108,6 +108,7 @@ public class GameManager : MonoBehaviour {
     {
         _state = GameState.ending;
         UIManager.Instance.EndGame();
+        ScoreManager.Instance.MAJScores();
     }
 
     public void MenuGame()
@@ -123,7 +124,7 @@ public class GameManager : MonoBehaviour {
         PlayerManager.Instance.HidePlayers();
         _timeFading = 0f;
         _isFading = true;
-        Debug.Log("EndTurn");
+        //Debug.Log("EndTurn");
     }
 
     public void Play()
@@ -131,6 +132,6 @@ public class GameManager : MonoBehaviour {
         _timeFading = 0f;
         _isFading = true;
         SceneFadeInOut.Instance.BeginFade(1);
-        Debug.Log("Play");
+        //Debug.Log("Play");
     }
 }

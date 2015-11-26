@@ -41,10 +41,11 @@ public class InputManager : MonoBehaviour {
                 }
                 else if (hit.transform.GetComponent<Objectif>())
                 {
+                    GameObject coord = hit.transform.gameObject;
+                    hit.transform.GetComponent<MeshRenderer>().enabled = false;
+                    PlayerManager.Instance.deplacement(coord.GetComponent<Objectif>()._case);
                     hit.transform.GetComponent<Objectif>().Possess();
                     PlayerManager.Instance.PossessObjectif();
-                    GameObject coord = hit.transform.gameObject;
-                    PlayerManager.Instance.deplacement(coord.GetComponent<Objectif>()._case);
                 }
                 else if (hit.transform.GetComponent<Loot>())
                 {

@@ -22,4 +22,9 @@ public class Objectif : MonoBehaviour {
         _possessed = false;
     }
 
+    public void setCase(GameObject currentCase)
+    {
+        _case = currentCase;
+    }
+
 }

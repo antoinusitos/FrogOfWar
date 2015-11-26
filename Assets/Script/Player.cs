@@ -72,6 +72,16 @@ public class Player : MonoBehaviour {
         return _stamina;
     }
 
+    public int GetKill()
+    {
+        return _kills;
+    }
+
+    public int GetDeath()
+    {
+        return _death;
+    }
+
     public int GetPorte()
     {
         return _porte;
@@ -131,6 +141,11 @@ public class Player : MonoBehaviour {
             _life -= degats;
             if (_life <= 0)
             {
+                if(_possessObjectif)
+                {
+                    BonusManager.Instance.SetPosObjectif(_currentCase);
+                    UnpossessBonus();
+                }
                 _death++;
                 Reset();
                 return true;
@@ -263,5 +278,10 @@ public class Player : MonoBehaviour {
     public void AjouterPiege(int value)
     {
         _pieges += value;
+    }
+
+    public bool HasObjectif()
+    {
+        return _possessObjectif;
     }
 }

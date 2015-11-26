@@ -6,10 +6,12 @@ public class PlateauManager : MonoBehaviour {
     public int _longueur = 15;
     public int _largeur = 9;
     public GameObject _case;
+    public GameObject _mur;
     public GameObject[] _plateau;
     private int _totalCases = 0;
     private GameObject _p;
     GameObject[] CaseToMove;
+    GameObject[] mursLD;
 
     public Material _walkable;
     public Material _defaultMat;
@@ -46,6 +48,7 @@ public class PlateauManager : MonoBehaviour {
             _plateau[i] = theCase;
             theCase.transform.parent = _p.transform;
         }
+        PlaceLD(_p);
     }
 
     public GameObject GetCase(int X, int Y)
@@ -91,15 +94,23 @@ public class PlateauManager : MonoBehaviour {
 
     public GameObject[] GetLootPos()
     {
-        GameObject[] retour = new GameObject[4];
-        int index = GetIndex(3, 1);
+        GameObject[] retour = new GameObject[8];
+        int index = GetIndex(3, 0);
         retour[0] = _plateau[index];
-        index = GetIndex(11, 1);
+        index = GetIndex(8, 0);
         retour[1] = _plateau[index];
-        index = GetIndex(3, 7);
+        index = GetIndex(12, 0);
         retour[2] = _plateau[index];
-        index = GetIndex(11, 7);
+        index = GetIndex(5, 4);
         retour[3] = _plateau[index];
+        index = GetIndex(9, 4);
+        retour[4] = _plateau[index];
+        index = GetIndex(2, 8);
+        retour[5] = _plateau[index];
+        index = GetIndex(6, 8);
+        retour[6] = _plateau[index];
+        index = GetIndex(11, 8);
+        retour[7] = _plateau[index];
         return retour;
     }
 
@@ -107,9 +118,11 @@ public class PlateauManager : MonoBehaviour {
     {
         CaseToMove = new GameObject[(int)Mathf.Pow(8, stamina)];
         int index = 0;
+        GameObject currentPlayer = PlayerManager.Instance.GetPlayerTurn();
+        int multiply = currentPlayer.GetComponent<Player>().HasObjectif() ? 2 : 1;
         for (int i = 0; i < _plateau.Length; i++)
         {
-            if (theCase != _plateau[i] && Mathf.Ceil(Vector3.Distance(theCase.transform.position, _plateau[i].transform.position)) <= stamina)
+            if (theCase != _plateau[i] && Mathf.Ceil(Vector3.Distance(theCase.transform.position, _plateau[i].transform.position)) * multiply <= stamina)
             {
                 CaseToMove[index] = _plateau[i];
                 index++;
@@ -136,8 +149,70 @@ public class PlateauManager : MonoBehaviour {
         }
     }
 
-    public void PlaceLD()
+    public void PlaceLD(GameObject _p)
     {
-
+        mursLD = new GameObject[24];
+        GameObject[] murs = new GameObject[24];
+        int index = 0;
+        murs[index] = GetCase(0, 0);
+        index++;
+        murs[index] = GetCase(10, 0);
+        index++;
+        murs[index] = GetCase(2, 1);
+        index++;
+        murs[index] = GetCase(3, 1);
+        index++;
+        murs[index] = GetCase(4, 1);
+        index++;
+        murs[index] = GetCase(8, 1);
+        index++;
+        murs[index] = GetCase(13, 1);
+        index++;
+        murs[index] = GetCase(13, 2);
+        index++;
+        murs[index] = GetCase(6, 2);
+        index++;
+        murs[index] = GetCase(4, 3);
+        index++;
+        murs[index] = GetCase(4, 4);
+        index++;
+        murs[index] = GetCase(4, 5);
+        index++;
+        murs[index] = GetCase(10, 3);
+        index++;
+        murs[index] = GetCase(10, 4);
+        index++;
+        murs[index] = GetCase(10, 5);
+        index++;
+        murs[index] = GetCase(1, 6);
+        index++;
+        murs[index] = GetCase(1, 7);
+        index++;
+        murs[index] = GetCase(8, 6);
+        index++;
+        murs[index] = GetCase(6, 7);
+        index++;
+        murs[index] = GetCase(10, 7);
+        index++;
+        murs[index] = GetCase(11, 7);
+        index++;
+        murs[index] = GetCase(12, 7);
+        index++;
+        murs[index] = GetCase(4, 8);
+        index++;
+        murs[index] = GetCase(14, 8);
+        index++;
+        for (int i = 0; i < murs.Length; ++i)
+        {
+            if (murs[i] != null)
+            {
+                mursLD[i] = (GameObject)Instantiate(_mur, murs[i].transform.position + new Vector3(0, 0, 1), Quaternion.identity);
+                mursLD[i].transform.parent = _p.transform;
+            }
+            else
+            {
+                Debug.Log("null");
+            }
+        }
     }
 }
