@@ -51,6 +51,11 @@ public class PlayerManager : MonoBehaviour {
         _player2Instance.GetComponent<Player>().Reset();
     }
 
+    public void ResetGame()
+    {
+        _tourJoueur1 = true;
+    }
+
     public void RefreshScorePlayers()
     {
         _player1Score.GetComponent<Text>().text = _player1Instance.GetComponent<Player>().GetScore().ToString();
@@ -59,6 +64,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void EndTurn()
     {
+        Debug.Log("PlayerManager : EndTurn");
         PlateauManager.Instance.ResetMoveCase();
         if (_tourJoueur1) // tour joueur 1
         {
@@ -74,20 +80,60 @@ public class PlayerManager : MonoBehaviour {
 
     public void NewTurn()
     {
-
-        GameObject currentPlayer = null;
+        Debug.Log("PlayerManager : newTurn");
+        GameManager.Instance.EndTurn();
         if (_tourJoueur1) // tour joueur 1
         {
             _player1Instance.GetComponent<Player>().RefillStamina();
-            currentPlayer = _player1Instance;
         }
         else // tour joueur 2
         {
             _player2Instance.GetComponent<Player>().RefillStamina();
-            currentPlayer = _player2Instance;
         }
         ActualiseStaminaText();
+       // PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
+    }
+
+    public void showCases()
+    {
+        GameObject currentPlayer = null;
+        if (_tourJoueur1) // tour joueur 1
+        {
+            currentPlayer = _player1Instance;
+        }
+        else // tour joueur 2
+        {
+            currentPlayer = _player2Instance;
+        }
         PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
+    }
+
+    public void HidePlayers()
+    {
+        _player1Instance.GetComponent<MeshRenderer>().enabled = false;
+        for (int i = 0; i < _player1Instance.transform.childCount; i++)
+        {
+            _player1Instance.transform.GetChild(i).GetComponent<MeshRenderer>().enabled = false;
+        }
+        _player2Instance.GetComponent<MeshRenderer>().enabled = false;
+        for (int i = 0; i < _player2Instance.transform.childCount; i++)
+        {
+            _player2Instance.transform.GetChild(i).GetComponent<MeshRenderer>().enabled = false;
+        }
+    }
+
+    public void ShowPlayers()
+    {
+        _player1Instance.GetComponent<MeshRenderer>().enabled = true;
+        for (int i = 0; i < _player1Instance.transform.childCount; i++)
+        {
+            _player1Instance.transform.GetChild(i).GetComponent<MeshRenderer>().enabled = true;
+        }
+        _player2Instance.GetComponent<MeshRenderer>().enabled = true;
+        for (int i = 0; i < _player2Instance.transform.childCount; i++)
+        {
+            _player2Instance.transform.GetChild(i).GetComponent<MeshRenderer>().enabled = true;
+        }
     }
 
     public void deplacement(GameObject theCase)
@@ -130,6 +176,7 @@ public class PlayerManager : MonoBehaviour {
 
             PlateauManager.Instance.ResetMoveCase();
             PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
+            GameManager.Instance.SetCameraPos();
         }
         ActualiseStaminaText();
     }
@@ -192,6 +239,18 @@ public class PlayerManager : MonoBehaviour {
         else
         {
             return _player2Instance;
+        }
+    }
+
+    public int GetPlayerTurnInt()
+    {
+        if (_tourJoueur1) // tour joueur 1
+        {
+            return 1;
+        }
+        else
+        {
+            return 2;
         }
     }
 

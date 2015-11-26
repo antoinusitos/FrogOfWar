@@ -3,10 +3,11 @@ using System.Collections;
 
 public class UIManager : MonoBehaviour {
 
-    public GameObject Menu;
-    public GameObject InGame;
-    public GameObject FOV;
-    public GameObject Ending;
+    public GameObject _menu;
+    public GameObject _inGame;
+    public GameObject _fov;
+    public GameObject _ending;
+    public GameObject _turnButton;
 
 
     private static UIManager instance;
@@ -32,25 +33,37 @@ public class UIManager : MonoBehaviour {
 
     public void MenuGame()
     {
-        Menu.SetActive(true);
-        FOV.SetActive(false);
-        InGame.SetActive(false);
-        Ending.SetActive(false);
+        _turnButton.SetActive(false);
+        _menu.SetActive(true);
+        _fov.SetActive(false);
+        _inGame.SetActive(false);
+        _ending.SetActive(false);
     }
 
     public void LaunchGame()
     {
-        InGame.SetActive(true);
-        FOV.SetActive(true);
-        Menu.SetActive(false);
-        Ending.SetActive(false);
+        _turnButton.SetActive(false);
+        _inGame.SetActive(true);
+        _fov.SetActive(true);
+        _menu.SetActive(false);
+        _ending.SetActive(false);
+    }
+
+    public void Turn()
+    {
+        _turnButton.SetActive(true);
+        _inGame.SetActive(false);
+        _fov.SetActive(false);
+        _menu.SetActive(false);
+        _ending.SetActive(false);
     }
 
     public void EndGame()
     {
-        InGame.SetActive(false);
-        FOV.SetActive(true);
-        Menu.SetActive(false);
-        Ending.SetActive(true);
+        _turnButton.SetActive(false);
+        _inGame.SetActive(false);
+        _fov.SetActive(true);
+        _menu.SetActive(false);
+        _ending.SetActive(true);
     }
 }

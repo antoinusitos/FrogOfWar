@@ -5,6 +5,7 @@ public class MenuButton : MonoBehaviour {
 
 	public void LaunchGame()
     {
+        Debug.Log("Menu Button : LaunchGame");
         GameManager.Instance.StartGame();
     }
 

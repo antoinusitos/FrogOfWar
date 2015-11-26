@@ -135,4 +135,9 @@ public class PlateauManager : MonoBehaviour {
             }
         }
     }
+
+    public void PlaceLD()
+    {
+
+    }
 }

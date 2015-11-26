@@ -54,7 +54,7 @@ public class Player : MonoBehaviour {
         _kills = 0;
         _death = 0;
         PlayerManager.Instance.ActualiseStaminaText();
-        PlayerManager.Instance.NewTurn();
+        //PlayerManager.Instance.NewTurn();
     }
 
     public GameObject GetCase()
