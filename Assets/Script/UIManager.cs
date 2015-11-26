@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviour {
 
     public GameObject _spriteObject;
 
+    public GameObject _canvasImage;
+    public GameObject _fX;
+
     private static UIManager instance;
 
     public static UIManager Instance
@@ -62,7 +65,9 @@ public class UIManager : MonoBehaviour {
         _menu.SetActive(true);
         _fov.SetActive(false);
         _inGame.SetActive(false);
+        _canvasImage.SetActive(true);
         _ending.SetActive(false);
+        _fX.SetActive(true);
     }
 
     public void LaunchGame()
@@ -72,6 +77,8 @@ public class UIManager : MonoBehaviour {
         _fov.SetActive(true);
         _menu.SetActive(false);
         _ending.SetActive(false);
+        _canvasImage.SetActive(false);
+        _fX.SetActive(false);
     }
 
     public void Turn()
@@ -81,6 +88,8 @@ public class UIManager : MonoBehaviour {
         _fov.SetActive(false);
         _menu.SetActive(false);
         _ending.SetActive(false);
+        _canvasImage.SetActive(false);
+        _fX.SetActive(false);
     }
 
     public void EndGame()
@@ -90,5 +99,7 @@ public class UIManager : MonoBehaviour {
         _fov.SetActive(true);
         _menu.SetActive(false);
         _ending.SetActive(true);
+        _canvasImage.SetActive(false);
+        _fX.SetActive(false);
     }
 }

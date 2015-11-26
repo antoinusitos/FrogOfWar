@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour {
         _state = GameState.ending;
         UIManager.Instance.EndGame();
         ScoreManager.Instance.MAJScores();
+        SoundManager.Instance.End();
     }
 
     public void MenuGame()
