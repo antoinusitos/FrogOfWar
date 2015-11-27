@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour {
         inGame = 1,
         ending = 2,
         waitPlayer = 3,
+        tuto = 4,
+        splash = 5,
     }
 
     private float _timeToFade = 0.5f;
@@ -65,6 +67,22 @@ public class GameManager : MonoBehaviour {
                     UIManager.Instance.MenuGame();
                     SoundManager.Instance.Menu();
                 }
+                else if (_state == GameState.tuto)
+                {
+                    _state = GameState.menu;
+                    UIManager.Instance.MenuGame();
+                }
+                else if (_state == GameState.menu)
+                {
+                    _state = GameState.tuto;
+                    UIManager.Instance.Tuto();
+                    //SoundManager.Instance.Menu();
+                }
+                else if (_state == GameState.splash)
+                {
+                    StartGame();
+                    StartCoroutine(HideSpash());
+                }
                 SetCameraPos();
                 //Debug.Log("show players");
             }
@@ -73,7 +91,6 @@ public class GameManager : MonoBehaviour {
 
     public void StartGame ()
     {
-        SetCameraPos();
         _plateau = new GameObject();
         _plateau.name = "plateau";
         FogOfWarManager.Instance.ClearRevealers();
@@ -86,7 +103,9 @@ public class GameManager : MonoBehaviour {
         _state = GameState.waitPlayer;
         PlayerManager.Instance.HidePlayers();
         UIManager.Instance.Turn();
+        SetCameraPos();
         SoundManager.Instance.Game();
+        SoundManager.Instance.Ready();
         // Debug.Log("StartGame");
     }
 
@@ -106,12 +125,29 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void Launch()
+    {
+        _timeFading = 0f;
+        _isFading = true;
+        _state = GameState.splash;
+        UIManager.Instance.ShowSplash();
+    }
+
     public void FinGame()
     {
         _state = GameState.ending;
         UIManager.Instance.EndGame();
         ScoreManager.Instance.MAJScores();
         SoundManager.Instance.End();
+        PlayerManager.Instance.DestroyPlayers();
+    }
+
+    public void Tuto()
+    {
+        //_state = GameState.tuto;
+        _timeFading = 0f;
+        _isFading = true;
+        SceneFadeInOut.Instance.BeginFade(1);
     }
 
     public void MenuGame()
@@ -127,6 +163,7 @@ public class GameManager : MonoBehaviour {
         PlayerManager.Instance.HidePlayers();
         _timeFading = 0f;
         _isFading = true;
+
         //Debug.Log("EndTurn");
     }
 
@@ -136,5 +173,11 @@ public class GameManager : MonoBehaviour {
         _isFading = true;
         SceneFadeInOut.Instance.BeginFade(1);
         //Debug.Log("Play");
+    }
+
+    IEnumerator HideSpash()
+    {
+        yield return new WaitForSeconds(3);
+        UIManager.Instance.HideSplash();
     }
 }

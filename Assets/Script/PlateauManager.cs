@@ -49,6 +49,7 @@ public class PlateauManager : MonoBehaviour {
             theCase.transform.parent = _p.transform;
         }
         PlaceLD(_p);
+        //Camera.main.transform.parent = _p.transform;
     }
 
     public GameObject GetCase(int X, int Y)
@@ -119,13 +120,18 @@ public class PlateauManager : MonoBehaviour {
         CaseToMove = new GameObject[(int)Mathf.Pow(8, stamina)];
         int index = 0;
         GameObject currentPlayer = PlayerManager.Instance.GetPlayerTurn();
-        int multiply = currentPlayer.GetComponent<Player>().HasObjectif() ? 2 : 1;
         for (int i = 0; i < _plateau.Length; i++)
         {
-            if (theCase != _plateau[i] && Mathf.Ceil(Vector3.Distance(theCase.transform.position, _plateau[i].transform.position)) * multiply <= stamina)
+            if (theCase != _plateau[i] && Mathf.Ceil(Vector3.Distance(theCase.transform.position, _plateau[i].transform.position)) <= stamina)
             {
-                CaseToMove[index] = _plateau[i];
-                index++;
+                RaycastHit hit;
+                Vector3 v = new Vector3(_plateau[i].transform.position.x - currentPlayer.transform.position.x, _plateau[i].transform.position.y - currentPlayer.transform.position.y, 0);
+                Debug.DrawRay(currentPlayer.transform.position, v, Color.green, 5);
+                if (!Physics.Raycast(currentPlayer.transform.position, v, out hit, Vector3.Distance(currentPlayer.transform.position, _plateau[i].transform.position)))
+                {
+                    CaseToMove[index] = _plateau[i];
+                    index++;
+                }
             }
         }
 

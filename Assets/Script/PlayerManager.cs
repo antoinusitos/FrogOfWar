@@ -40,13 +40,13 @@ public class PlayerManager : MonoBehaviour {
         _player1Instance = (GameObject)Instantiate(_player1Prefab, caseP1.transform.position + new Vector3(0, 0, 1f), Quaternion.identity);
         _player1Instance.GetComponent<Player>().SetCase(caseP1);
         _player1Instance.GetComponent<Player>().SetSpawnPoint();
-        _player1Instance.transform.parent = _plateau.transform;
+        //_player1Instance.transform.parent = _plateau.transform;
         _player1Instance.GetComponent<Revealer>().Register();
         _player1Instance.GetComponent<Player>().Reset();
         _player2Instance = (GameObject)Instantiate(_player2Prefab, caseP2.transform.position + new Vector3(0, 0, 1f), Quaternion.identity);
         _player2Instance.GetComponent<Player>().SetCase(caseP2);
         _player2Instance.GetComponent<Player>().SetSpawnPoint();
-        _player2Instance.transform.parent = _plateau.transform;
+        //_player2Instance.transform.parent = _plateau.transform;
         _player2Instance.GetComponent<Revealer>().Register();
         _player2Instance.GetComponent<Player>().Reset();
     }
@@ -73,6 +73,7 @@ public class PlayerManager : MonoBehaviour {
         else // tour joueur 2
         {
             _player2Instance.GetComponent<Player>().BoostStamina();
+            BonusManager.Instance.AddTourObjectif();
         }
         _tourJoueur1 = !_tourJoueur1;
         NewTurn();
@@ -91,6 +92,7 @@ public class PlayerManager : MonoBehaviour {
             _player2Instance.GetComponent<Player>().RefillStamina();
         }
         ActualiseStaminaText();
+        UIManager.Instance.RefreshLife();
         // PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
     }
 
@@ -122,6 +124,12 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
+    public void DestroyPlayers()
+    {
+        Destroy(_player1Instance.gameObject);
+        Destroy(_player2Instance.gameObject);
+    }
+
     public void ShowPlayers()
     {
         _player1Instance.GetComponent<MeshRenderer>().enabled = true;
@@ -151,8 +159,7 @@ public class PlayerManager : MonoBehaviour {
         Case.coordonees theCoord = theCase.GetComponent<Case>().GetCoordonnees();
         GameObject currentCase = currentPlayer.GetComponent<Player>().GetCase();
         int currentStamina = currentPlayer.GetComponent<Player>().GetStamina();
-        int multiply = currentPlayer.GetComponent<Player>().HasObjectif() ? 2 : 1;
-        if (!theCoord._occcupe && Vector3.Distance(currentCase.transform.position, theCase.transform.position) * multiply <= currentStamina)
+        if (!theCoord._occcupe && Vector3.Distance(currentCase.transform.position, theCase.transform.position) <= currentStamina)
         {
             Vector3 diff = currentCase.transform.position - theCase.transform.position;
             if (diff.x <= -1)// va à droite
@@ -173,13 +180,18 @@ public class PlayerManager : MonoBehaviour {
             theCase.GetComponent<Case>().SetOccupe(true);
             currentPlayer.GetComponent<Player>().GetCase().GetComponent<Case>().SetOccupe(false);
             currentPlayer.GetComponent<Player>().SetCase(theCase);
-            currentPlayer.GetComponent<Player>().Consume((int)Mathf.Ceil(dist) * multiply);
+            currentPlayer.GetComponent<Player>().Consume((int)Mathf.Ceil(dist));
 
             PlateauManager.Instance.ResetMoveCase();
             PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
             GameManager.Instance.SetCameraPos();
             SoundManager.Instance.Move();
+            if(currentPlayer.GetComponent<Player>().HasObjectif())
+            {
+                BonusManager.Instance.PlaceObjectif(theCase);
+            }
         }
+        UIManager.Instance.ShowBonus();
         ActualiseStaminaText();
     }
 

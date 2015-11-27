@@ -117,15 +117,17 @@ public class FogOfWarManager : MonoBehaviour
     private void Update()
     {
         ClearPixels();
-
-        if (_revealers == null)
-            Debug.Log("revealers est null");
+        /*if (_revealers == null)
+            Debug.Log("revealers est null");*/
 
 
         foreach (var revealer in _revealers)
         {
             if (revealer == null)
-                Debug.Log("revealer est null");
+            {
+                //Debug.Log("revealer est null");
+                return;
+            }
             // should do a raycast from the revealer to the camera.
             var screenPoint = Camera.main.WorldToScreenPoint(revealer.transform.position);
             var ray = Camera.main.ScreenPointToRay(screenPoint);

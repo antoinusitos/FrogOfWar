@@ -7,7 +7,14 @@ public class MenuButton : MonoBehaviour {
     {
         //Debug.Log("Menu Button : LaunchGame");
         SoundManager.Instance.Button();
-        GameManager.Instance.StartGame();
+        GameManager.Instance.Launch();
+    }
+
+    public void Tuto()
+    {
+        //Debug.Log("Menu Button : LaunchGame");
+        SoundManager.Instance.Button();
+        GameManager.Instance.Tuto();
     }
 
     public void Quit()

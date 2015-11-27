@@ -49,6 +49,23 @@ public class BonusManager : MonoBehaviour {
         }
     }
 
+    public void PlaceObjectif(GameObject theCase)
+    {
+        _objectifInstance.transform.position = new Vector3(theCase.transform.position.x, theCase.transform.position.y, -1);
+    }
+
+    public void AddTourObjectif()
+    {
+        if(PlayerManager.Instance.GetPlayer(1).GetComponent<Player>().HasObjectif())
+        {
+            _objectifInstance.GetComponent<Objectif>().AjouteTour(1);
+        }
+        else if(PlayerManager.Instance.GetPlayer(2).GetComponent<Player>().HasObjectif())
+        {
+            _objectifInstance.GetComponent<Objectif>().AjouteTour(2);
+        }
+    }
+
     public void SetPosObjectif(GameObject currentCase)
     {
         _objectifInstance.transform.position = currentCase.transform.position + new Vector3(0, 0, 1);

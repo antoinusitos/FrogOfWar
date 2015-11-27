@@ -24,23 +24,26 @@ public class Loot : MonoBehaviour {
             {
                 case bonus.attaque:
                     picker.GetComponent<Player>().AjouterAttaque(value);
+                    picker.GetComponent<Player>().TakeEpee();
                     break;
 
                 case bonus.shield:
                     picker.GetComponent<Player>().AjouterShield(value);
+                    picker.GetComponent<Player>().TakeShield();
                     break;
 
                 case bonus.piege:
                     picker.GetComponent<Player>().AjouterPiege(value);
+                    picker.GetComponent<Player>().TakeSac();
                     break;
             }
         }
-        StartCoroutine(ShowBonus());
+        StartCoroutine(ShowBonus(picker));
     }
 
-    IEnumerator ShowBonus()
+    IEnumerator ShowBonus(GameObject picker)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         SoundManager.Instance.Bonus();
         if (currentBonus == bonus.attaque)
             PlayerManager.Instance.GetPlayerTurn().GetComponent<Player>().ShowBonus(0);
@@ -49,6 +52,7 @@ public class Loot : MonoBehaviour {
         else if (currentBonus == bonus.piege)
             PlayerManager.Instance.GetPlayerTurn().GetComponent<Player>().ShowBonus(2);
         yield return new WaitForSeconds(1);
+        
         Destroy(gameObject);
     }
 }

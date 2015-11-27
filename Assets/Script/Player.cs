@@ -4,7 +4,7 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
     public int _playerNumber;
-    private int _life;
+    public int _life;
     private GameObject _currentCase;
     private int _stamina;
     private int _staminaMax;
@@ -19,11 +19,17 @@ public class Player : MonoBehaviour {
     public int _orientationX;
     public int _orientationY;
     private bool _hasContreAttack;
-    private bool _possessObjectif;
+    public bool _possessObjectif;
     private int _score;
     private int _pieges;
     public Vector3 _spawnPoint;
     public int _scoreMax;
+
+    public bool _hasPlayed = false;
+
+    public bool _hasEpee = false;
+    public bool _hasShield = false;
+    public bool _hasSac = false;
 
     public Transform FogOfWarPlane;
     public int Number = 1;
@@ -42,8 +48,8 @@ public class Player : MonoBehaviour {
         _palierStaminaMax = 5;
         _attaque = 1;
         _porte = 1;
-        _coutStaminaAttaque = 3;
-        _coutStaminaContreAttaque = 3;
+        _coutStaminaAttaque = 2;
+        _coutStaminaContreAttaque = 2;
         _orientationX = 0;
         _orientationY = -1;
         _hasContreAttack = false;
@@ -70,6 +76,16 @@ public class Player : MonoBehaviour {
     public int GetStamina()
     {
         return _stamina;
+    }
+
+    public int GetLife()
+    {
+        return _life;
+    }
+
+    public int GetShield()
+    {
+        return _shield;
     }
 
     public int GetKill()
@@ -120,23 +136,60 @@ public class Player : MonoBehaviour {
         UIManager.Instance.SetSpriteStamina(_stamina);
     }
 
+    public bool GetHasEpee()
+    {
+        return _hasEpee;
+    }
+
+    public void TakeEpee()
+    {
+        _hasEpee = true;
+    }
+
+    public bool GetHasShield()
+    {
+        return _hasShield;
+    }
+
+    public void TakeShield()
+    {
+        _hasShield = true;
+    }
+
+    public bool GetHasSac()
+    {
+        return _hasSac;
+    }
+
+    public void TakeSac()
+    {
+        _hasSac = true;
+    }
+
     public void Reset()
     {
-        _life = 100;
+        _life = 3;
         //_staminaMax = 3;
         _stamina = _staminaMax;
         SetOrientation(0, -1);
         transform.position = _spawnPoint;
         PlayerManager.Instance.ResetPlayer(_playerNumber);
+        _hasEpee = false;
+        _hasSac = false;
+        _hasShield = false;
     }
 
     public bool TakeDamage(int damage)
     {
         //Debug.Log("take damage");
         int degats = damage;
-        int prevShield = _shield;
-        _shield -= degats;
-        degats -= prevShield;
+
+        if (_shield > 0)
+        {
+            int prevShield = _shield;
+            _shield -= degats;
+            degats -= prevShield;
+        }
         if (degats > 0)
         {
             _life -= degats;
@@ -180,10 +233,6 @@ public class Player : MonoBehaviour {
         {
             _kills++;
             _score += 1;
-            if(_possessObjectif)
-            {
-                _score ++;
-            }
             PlayerManager.Instance.RefreshScorePlayers();
 
             if(_score >= _scoreMax)
@@ -216,14 +265,13 @@ public class Player : MonoBehaviour {
                 Consume(_coutStaminaContreAttaque);
                 bool dead = playerSend.GetComponent<Player>().TakeDamage(_attaque);
                 playerSend.GetComponent<Player>().ContreAttack(gameObject);
+                UIManager.Instance.RefreshLife();
                 if (dead)
                 {
+                    PlateauManager.Instance.ShowMoveCase(playerSend.GetComponent<Player>().GetCase(), playerSend.GetComponent<Player>().GetStamina());
+                    GameManager.Instance.SetCameraPos();
                     _kills++;
                     _score += 1;
-                    if (_possessObjectif)
-                    {
-                        _score++;
-                    }
                     PlayerManager.Instance.RefreshScorePlayers();
 
                     if (_score >= _scoreMax)
@@ -234,6 +282,12 @@ public class Player : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void AddScore()
+    {
+        _score++;
+        PlayerManager.Instance.RefreshScorePlayers();
     }
 
     public void SetOrientation(int X, int Y)
@@ -269,17 +323,20 @@ public class Player : MonoBehaviour {
 
     public void AjouterAttaque(int value)
     {
-        _attaque += value;
+        if(!_hasEpee)
+            _attaque += value;
     }
 
     public void AjouterShield(int value)
     {
-        _shield += value;
+        if (!_hasShield)
+            _shield += value;
     }
 
     public void AjouterPiege(int value)
     {
-        _pieges += value;
+        if (!_hasSac)
+            _pieges += value;
     }
 
     public bool HasObjectif()
