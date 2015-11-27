@@ -39,6 +39,8 @@ public class Player : MonoBehaviour {
     public GameObject ConeH;
     public GameObject ConeB;
 
+    public bool deplacement;
+
     // Use this for initialization
     void Start ()
     {
@@ -55,12 +57,27 @@ public class Player : MonoBehaviour {
         _hasContreAttack = false;
         _score = 0;
         _possessObjectif = false;
-        _scoreMax = 5;
+        _scoreMax = 4;
         _shield = 0;
         _kills = 0;
         _death = 0;
         PlayerManager.Instance.ActualiseStaminaText();
         //PlayerManager.Instance.NewTurn();
+    }
+
+    public void Update()
+    {
+        if (deplacement)
+        {
+            transform.position = Vector3.Lerp(transform.position, _currentCase.transform.position + new Vector3(0, 0, 1), Time.deltaTime * 2);
+            GameManager.Instance.SetCameraPos();
+            if (Vector3.Distance(transform.position, _currentCase.transform.position) <= .01f)
+            {
+                deplacement = false;
+                transform.position = _currentCase.transform.position + new Vector3(0, 0, 1);
+                GameManager.Instance.SetCameraPos();
+            }
+        }
     }
 
     public GameObject GetCase()
@@ -182,6 +199,7 @@ public class Player : MonoBehaviour {
     public bool TakeDamage(int damage)
     {
         //Debug.Log("take damage");
+        UIManager.Instance.SpawnHit(gameObject);
         int degats = damage;
 
         if (_shield > 0)

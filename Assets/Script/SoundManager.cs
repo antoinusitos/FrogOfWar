@@ -14,6 +14,7 @@ public class SoundManager : MonoBehaviour {
     public AudioClip _end;
     public AudioClip _button;
     public AudioClip _ready;
+    public AudioClip _papier;
 
     private static SoundManager instance;
 
@@ -58,6 +59,11 @@ public class SoundManager : MonoBehaviour {
     public void Attack()
     {
         Camera.main.GetComponent<AudioSource>().PlayOneShot(_attack);
+    }
+
+    public void Papier()
+    {
+        Camera.main.GetComponent<AudioSource>().PlayOneShot(_papier);
     }
 
     public void Chest()

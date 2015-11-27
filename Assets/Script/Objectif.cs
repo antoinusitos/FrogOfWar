@@ -43,10 +43,10 @@ public class Objectif : MonoBehaviour {
         if(playerPosses == player)
         {
             nbTour++;
-            if(nbTour == 3)
+            if(nbTour == 4)
             {
                 PlayerManager.Instance.GetPlayer(playerPosses).GetComponent<Player>().AddScore();
-                nbTour = 0;
+                Destroy(gameObject);
             }
         }
         else

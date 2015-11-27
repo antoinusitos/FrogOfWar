@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-	    if(Input.GetMouseButtonDown(0) && GameManager.Instance._state == GameManager.GameState.inGame)
+	    if(Input.GetMouseButtonDown(0) && GameManager.Instance._state == GameManager.GameState.inGame && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -46,7 +46,7 @@ public class InputManager : MonoBehaviour {
                 {
                     PlayerManager.Instance.WantToAttack(hit.transform.gameObject);
                 }
-                else if (hit.transform.GetComponent<Objectif>() && hit.transform.GetComponent<Objectif>().GetPossess() == false && Vector3.Distance(hit.transform.position, currentPlayer.transform.position) <= currentPlayer.GetComponent<Player>().GetStamina())
+                else if (hit.transform.GetComponent<Objectif>() && hit.transform.GetComponent<Objectif>().GetPossess() == false && Mathf.Round(Vector3.Distance(hit.transform.position, currentPlayer.transform.position)) <= currentPlayer.GetComponent<Player>().GetStamina())
                 {
                     GameObject coord = hit.transform.gameObject;
                     hit.transform.GetComponent<MeshRenderer>().enabled = false;
@@ -54,11 +54,15 @@ public class InputManager : MonoBehaviour {
                     hit.transform.GetComponent<Objectif>().Possess(currentPlayer.GetComponent<Player>()._playerNumber);
                     PlayerManager.Instance.PossessObjectif();
                 }
-                else if (hit.transform.GetComponent<Loot>() && Vector3.Distance(hit.transform.position, currentPlayer.transform.position) <= currentPlayer.GetComponent<Player>().GetStamina())
+                else if (hit.transform.GetComponent<Loot>() && Mathf.Round(Vector3.Distance(hit.transform.position, currentPlayer.transform.position)) <= currentPlayer.GetComponent<Player>().GetStamina())
                 {
                     GameObject coord = hit.transform.gameObject;
                     coord.GetComponent<Loot>().Pickup(PlayerManager.Instance.GetPlayerTurn());
                     PlayerManager.Instance.deplacement(coord.GetComponent<Loot>()._case);
+                }
+                else
+                {
+                    Debug.Log(Vector3.Distance(hit.transform.position, currentPlayer.transform.position));
                 }
             }
         }

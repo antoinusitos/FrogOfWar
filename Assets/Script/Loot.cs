@@ -15,6 +15,23 @@ public class Loot : MonoBehaviour {
     public int value = 1;
     public GameObject _case;
 
+    void Start()
+    {
+        int rand = Random.Range(0, 3);
+        if(rand == 0)
+        {
+            currentBonus = bonus.attaque;
+        }
+        else if (rand == 1)
+        {
+            currentBonus = bonus.shield;
+        }
+        else if (rand == 2)
+        {
+            currentBonus = bonus.piege;
+        }
+    }
+
     public void Pickup(GameObject picker)
     {
         if(picker.GetComponent<Player>())

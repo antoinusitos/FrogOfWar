@@ -176,12 +176,12 @@ public class PlayerManager : MonoBehaviour {
             float Z = 1f;
             if (theCase.GetComponent<Objectif>())
                 Z = 0f;
-            currentPlayer.transform.position = new Vector3(theCoord._x, theCoord._y, Z);
+            //currentPlayer.transform.position = new Vector3(theCoord._x, theCoord._y, Z);
             theCase.GetComponent<Case>().SetOccupe(true);
             currentPlayer.GetComponent<Player>().GetCase().GetComponent<Case>().SetOccupe(false);
             currentPlayer.GetComponent<Player>().SetCase(theCase);
             currentPlayer.GetComponent<Player>().Consume((int)Mathf.Ceil(dist));
-
+            currentPlayer.GetComponent<Player>().deplacement = true;
             PlateauManager.Instance.ResetMoveCase();
             PlateauManager.Instance.ShowMoveCase(currentPlayer.GetComponent<Player>().GetCase(), currentPlayer.GetComponent<Player>().GetStamina());
             GameManager.Instance.SetCameraPos();
@@ -216,6 +216,7 @@ public class PlayerManager : MonoBehaviour {
             float dist = Vector3.Distance(_player1Instance.transform.position, _player2Instance.transform.position);
             if (dist <= porte)
             {
+                EventManager.Instance.HasAttacked();
                 _player1Instance.GetComponent<Player>().Attack(_player2Instance);
             }
         }
@@ -226,8 +227,13 @@ public class PlayerManager : MonoBehaviour {
             float dist = Vector3.Distance(_player1Instance.transform.position, _player2Instance.transform.position);
             if (dist <= porte)
             {
+                EventManager.Instance.HasAttacked();
                 _player2Instance.GetComponent<Player>().Attack(_player1Instance);
             }
+        }
+        else
+        {
+            Debug.Log("lol");
         }
         ActualiseStaminaText();
     }

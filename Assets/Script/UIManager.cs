@@ -37,6 +37,14 @@ public class UIManager : MonoBehaviour {
     public GameObject _fX;
     public GameObject _fXFin;
 
+    public GameObject _Infos;
+    public GameObject _TextInfo;
+    public GameObject _ImageInfo;
+    public Sprite _ImageJ1;
+    public Sprite _ImageJ2;
+
+    public GameObject hit;
+
     private static UIManager instance;
 
     public static UIManager Instance
@@ -45,6 +53,11 @@ public class UIManager : MonoBehaviour {
         {
             return instance;
         }
+    }
+
+    public void SpawnHit(GameObject p)
+    {
+        Instantiate(hit, p.transform.position + new Vector3(0, 0, 1), Quaternion.identity);
     }
 
     void Awake()
@@ -56,6 +69,24 @@ public class UIManager : MonoBehaviour {
     void Start()
     {
         MenuGame();
+    }
+
+    public void ShowInfo()
+    {
+        if(EventManager.Instance.haveInfo)
+        {
+            SoundManager.Instance.Papier();
+            _Infos.SetActive(true);
+            if (PlayerManager.Instance.GetPlayerTurnInt() == 1)
+                _ImageInfo.GetComponent<Image>().sprite = _ImageJ1;
+            else
+                _ImageInfo.GetComponent<Image>().sprite = _ImageJ2;
+
+            if (EventManager.Instance.hasAttack)
+                _TextInfo.GetComponent<Text>().text = "Vous avez été attaqué !";
+
+            StartCoroutine(wait());
+        }
     }
 
     public void SetSpriteStamina(int nb)
@@ -150,6 +181,7 @@ public class UIManager : MonoBehaviour {
         _fov.SetActive(true);
         ShowBonus();
         RefreshLife();
+        ShowInfo();
     }
 
     public void HideSplash()
@@ -180,6 +212,7 @@ public class UIManager : MonoBehaviour {
         _fXFin.SetActive(false);
         _tuto.SetActive(false);
         _endingImage.SetActive(false);
+        _Infos.SetActive(false);
     }
 
     public void Turn()
@@ -196,5 +229,13 @@ public class UIManager : MonoBehaviour {
         _fXFin.SetActive(true);
         _endingImage.SetActive(true);
         _endingImage.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, _endingImage.transform.position.z);
+        _fXFin.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, _endingImage.transform.position.z);
+    }
+
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(4);
+        _Infos.SetActive(false);
+        EventManager.Instance.Reset();
     }
 }
